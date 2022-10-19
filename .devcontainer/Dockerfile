@@ -57,11 +57,11 @@ RUN pip install --no-cache .[jupyterlab]
 
 RUN pip install -r docs/requirements.txt
 
-# ARG NB_USER=manimuser
-# ARG NB_UID=1000
-# ENV USER ${NB_USER}
-# ENV NB_UID ${NB_UID}
-# ENV HOME /manim
+#ARG NB_USER=manimuser
+#ARG NB_UID=1000
+#ENV USER ${NB_USER}
+#ENV NB_UID ${NB_UID}
+#ENV HOME /workspace
 
 #RUN adduser --disabled-password \
 #    --gecos "Default user" \
@@ -70,9 +70,9 @@ RUN pip install -r docs/requirements.txt
 
 # create working directory for user to mount local directory into
 # WORKDIR ${HOME}
-# USER root
-# RUN chown -R ${NB_USER}:${NB_USER} ${HOME}
-# RUN chmod 777 ${HOME}
-# USER ${NB_USER}
+#USER root
+#RUN chown -R ${USER}:${USER} ${HOME}
+#RUN chmod 777 ${HOME}
+#USER ${USER}
 
 # CMD [ "/bin/bash" ]
