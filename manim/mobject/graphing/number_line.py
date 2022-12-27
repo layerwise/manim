@@ -173,7 +173,7 @@ class NumberLine(Line):
                 "num_decimal_places": self._decimal_places_from_step(x_range[2]),
             }
 
-        # turn into into an np array to scale by just applying the function
+        # turn into a NumPy array to scale by just applying the function
         self.x_range = np.array(x_range, dtype=float)
         self.x_min, self.x_max, self.x_step = scaling.function(self.x_range)
         self.length = length
@@ -592,14 +592,12 @@ class NumberLine(Line):
         self, label_tex: str | float | VMobject, **kwargs
     ) -> VMobject:
         """Checks if the label is a :class:`~.VMobject`, otherwise, creates a
-        label according to the ``label_constructor``.
+        label according to :attr:`label_constructor`.
 
         Parameters
         ----------
         label_tex
             The label to be compared against the above types.
-        label_constructor
-            The VMobject class used to construct the label.
 
         Returns
         -------
