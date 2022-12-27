@@ -226,7 +226,7 @@ class Mobject:
             cls.__init__ = cls._original__init__
 
     @property
-    def animate(self):
+    def animate(self) -> _AnimationBuilder | T:
         """Used to animate the application of any method of :code:`self`.
 
         Any method called on :code:`animate` is converted to an animation of applying
@@ -333,10 +333,7 @@ class Mobject:
         return result
 
     def __repr__(self):
-        if config["renderer"] == "opengl":
-            return super().__repr__()
-        else:
-            return str(self.name)
+        return str(self.name)
 
     def reset_points(self):
         """Sets :attr:`points` to be an empty array."""
@@ -433,13 +430,15 @@ class Mobject:
                 raise TypeError("All submobjects must be of type Mobject")
             if m is self:
                 raise ValueError("Mobject cannot contain self")
-            if any(mobjects.count(elem) > 1 for elem in mobjects):
-                logger.warning(
-                    "Attempted adding some Mobject as a child more than once, "
-                    "this is not possible. Repetitions are ignored.",
-                )
-                mobjects = remove_list_redundancies(mobjects)
-        self.submobjects = list_update(self.submobjects, mobjects)
+
+        unique_mobjects = remove_list_redundancies(mobjects)
+        if len(mobjects) != len(unique_mobjects):
+            logger.warning(
+                "Attempted adding some Mobject as a child more than once, "
+                "this is not possible. Repetitions are ignored.",
+            )
+
+        self.submobjects = list_update(self.submobjects, unique_mobjects)
         return self
 
     def insert(self, index: int, mobject: Mobject):

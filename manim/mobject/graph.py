@@ -58,7 +58,13 @@ def _determine_graph_layout(
         auto_layout = automatic_layouts[layout](
             nx_graph, scale=layout_scale, **layout_config
         )
-        return {k: np.append(v, [0]) for k, v in auto_layout.items()}
+        # NetworkX returns a dictionary of 3D points if the dimension
+        # is specified to be 3. Otherwise, it returns a dictionary of
+        # 2D points, so adjusting is required.
+        if layout_config.get("dim") == 3:
+            return auto_layout
+        else:
+            return {k: np.append(v, [0]) for k, v in auto_layout.items()}
     elif layout == "tree":
         return _tree_layout(
             nx_graph, root_vertex=root_vertex, scale=layout_scale, **layout_config
@@ -621,13 +627,11 @@ class Graph(VMobject, metaclass=ConvertToOpenGL):
                 f"Vertex identifier '{vertex}' is already used for a vertex in this graph.",
             )
 
-        if isinstance(label, (Mobject, OpenGLMobject)):
-            label = label
-        elif label is True:
+        if label is True:
             label = MathTex(vertex, fill_color=label_fill_color)
         elif vertex in self._labels:
             label = self._labels[vertex]
-        else:
+        elif not isinstance(label, (Mobject, OpenGLMobject)):
             label = None
 
         base_vertex_config = copy(self.default_vertex_config)
