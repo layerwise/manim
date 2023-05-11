@@ -57,6 +57,8 @@ RUN pip install --no-cache .[jupyterlab]
 
 RUN pip install -r docs/requirements.txt
 
+ENV PYTHONPATH=/layerwise/lectures/:$PYTHONPATH
+
 #ARG NB_USER=manimuser
 #ARG NB_UID=1000
 #ENV USER ${NB_USER}
